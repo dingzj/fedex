@@ -10,6 +10,7 @@ module Fedex
         @credentials = credentials
         @packages = options[:packages]
         @ready_timestamp = options[:ready_timestamp]
+        @package_location = options[:package_location] || 'FRONT'
         @close_time = options[:close_time]
         @carrier_code = options[:carrier_code]
         @remarks = options[:remarks] if options[:remarks]
@@ -44,6 +45,7 @@ module Fedex
             add_package_details(xml)
           }
         end
+        puts builder.doc.root.to_xml if @debug
         builder.doc.root.to_xml
       end
 
@@ -60,6 +62,7 @@ module Fedex
           else
             xml.UseAccountAddress true
           end
+          xml.PackageLocation @package_location
           xml.ReadyTimestamp @ready_timestamp
           xml.CompanyCloseTime @close_time.strftime("%H:%M:%S")
         }
