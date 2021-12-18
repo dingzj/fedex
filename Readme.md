@@ -352,12 +352,15 @@ address_result.postal_code
 To request a pickup:
 
 ```ruby
+location = {name: 'First Last', company: 'First Last', phone_number: '800-123-4567', address: ['123 Main St', 'Ste B'], city: 'Atlanta', state: 'GA', postal_code: '30303', country_code: 'US'}; 
 
-pickup = fedex.pickup(:carrier_code => 'FDXE',
-                      :packages => {:weight => {:units => "LB", :value => 10}, :count => 2},
-                      :ready_timestamp => Date.today.to_datetime + 1.375,
-                      :close_time => Date.today.to_time + 60 * 60 * 17,
-                      :country_relationship => "DOMESTIC")
+pickup = fedex.pickup(carrier_code: 'FDXG', 
+          pickup_location: location, package_location: 'FRONT', 
+          packages: {weight: {units: "LB", value: 10}, count: 2}, 
+          ready_timestamp: ((Date.today+3).to_time + 60 * 60 * 9).strftime('%Y-%m-%dT%H:%M:%S'), 
+          close_time: (Date.today+3).to_time + 60 * 60 * 17, 
+          country_relationship: "DOMESTIC", commodity_description: 'commercial items')
+
 puts pickup[:pickup_confirmation_number]
 ```
 
